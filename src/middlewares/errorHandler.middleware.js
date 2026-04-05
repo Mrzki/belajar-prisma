@@ -1,3 +1,5 @@
+import { success } from "zod";
+
 const errorHandler = (err, req, res, next) => {
   let statusCode = err.statusCode || 500;
   let message = err.message || "Terjadi kesalahan server";
@@ -23,6 +25,7 @@ const errorHandler = (err, req, res, next) => {
   }
 
   const response = {
+    success: false,
     message,
     ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   };

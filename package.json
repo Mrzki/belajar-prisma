@@ -8,13 +8,17 @@
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
     "seed": "node prisma/seed.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test node --experimental-vm-modules node_modules/.bin/jest --runInBand",
+    "test:watch": "NODE_ENV=test node --experimental-vm-modules node_modules/.bin/jest --watch --runInBand"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "prisma": "^7.6.0"
+    "@jest/globals": "^30.3.0",
+    "jest": "^30.3.0",
+    "prisma": "^7.6.0",
+    "supertest": "^7.2.2"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.6.0",
@@ -32,5 +36,12 @@
   },
   "prisma": {
     "seed": "node prisma/seed.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {},
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
+    ]
   }
 }
