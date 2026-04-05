@@ -1,13 +1,8 @@
-import { execSync } from "child_process";
 import prisma from "../../db.js";
 import redis from "../../utils/redis.js";
 import bcrypt from "bcrypt";
 
-export const setupTestDB = async () => {
-  process.env.DATABASE_URL = process.env.DATABASE_URL;
-
-  execSync("npx prisma migrate deploy", { stdio: "inherit" });
-};
+export const setupTestDB = async () => {};
 
 export const clearDB = async () => {
   await prisma.orderItem.deleteMany();
