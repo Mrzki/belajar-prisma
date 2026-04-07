@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Test WebSocket</title>
+  </head>
+  <body>
+    <h2>WebSocket Test</h2>
+    <p>Status: <span id="status">Disconnected</span></p>
+    <p>User ID: <input id="userId" value="1" type="number" /></p>
+    <button onclick="joinRoom()">Join Room</button>
+    <div
+      id="notifications"
+      style="
+        margin-top: 20px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        min-height: 100px;
+      "
+    >
+      <p><i>Notifikasi akan muncul di sini...</i></p>
+    </div>
+
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io("http://localhost:3000");
+
+      socket.on("connect", () => {
+        document.getElementById("status").innerText =
+          "Connected! ID: " + socket.id;
+        console.log("Connected:", socket.id);
+      });
+
+      socket.on("disconnect", () => {
+        document.getElementById("status").innerText = "Disconnected";
+      });
+
+      // Listen notifikasi order
+      socket.on("order:created", (data) => {
+        console.log("Order notification:", data);
+        const div = document.getElementById("notifications");
+        div.innerHTML += `<p>✅ <strong>${data.message}</strong> - Order ID: ${data.orderId}</p>`;
+      });
+
+      function joinRoom() {
+        const userId = document.getElementById("userId").value;
+        socket.emit("join", parseInt(userId));
+        console.log("Joined room user:" + userId);
+        document.getElementById("status").innerText +=
+          " | Joined room user:" + userId;
+      }
+    </script>
+  </body>
+</html>

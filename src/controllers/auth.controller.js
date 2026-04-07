@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../db.js";
 import AppError from "../utils/AppError.js";
 import { sendSuccess, sendCreated } from "../utils/response.js";
+import { emailQueue } from "../queues/email.queue.js";
 
 export const register = async (req, res, next) => {
   try {
@@ -17,6 +18,11 @@ export const register = async (req, res, next) => {
     const newUser = await prisma.user.create({
       data: { name, email, password: hashedPassword },
       omit: { password: true },
+    });
+
+    emailQueue.add("send-welcome-email", {
+      email: newUser.email,
+      name: newUser.name,
     });
 
     sendCreated(res, newUser, "Registrasi berhasil");
