@@ -39,6 +39,8 @@ model Order {
   id         Int         @id @default(autoincrement())
   userId     Int         @map("user_id")
   status     String      @default("pending")
+  snapToken  String?     @map("snap_token")
+  snapUrl    String?     @map("snap_url")
   createdAt  DateTime    @default(now()) @map("created_at")
   user       User        @relation(fields: [userId], references: [id])
   orderItems OrderItem[]
